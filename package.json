@@ -1,0 +1,22 @@
+{
+  "name": "node-blake2",
+  "version": "0.1.0",
+  "description": "nodejs hook for blake2",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/index.js"
+  },
+  "keywords": [
+    "blake2"
+  ],
+  "gypfile": true,
+  "author": "AssassinsMod",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AssassinsMod/node-blake2.git"
+  },
+  "dependencies": {
+    "bindings": "^1.2.1"
+  }
+}
