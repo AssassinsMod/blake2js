@@ -1,0 +1,8 @@
+# Modules
+node_modules/
+
+# References and non-related resources
+reference/
+
+# Binaries
+build/

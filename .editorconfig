@@ -1,0 +1,17 @@
+# EditorConfig
+# http://editorconfig.org/
+
+root = true
+
+[*]
+end_of_line = lf
+charset = utf-8
+indent_style = tab
+tab_width = 2
+
+[*.{json,tern*,*rc}]
+indent_style = space
+indent_size = 2
+
+[*.html]
+tab_width = 4
