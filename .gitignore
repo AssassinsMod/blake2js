@@ -6,3 +6,6 @@ reference/
 
 # Binaries
 build/
+
+# ImDone
+.imdone/
