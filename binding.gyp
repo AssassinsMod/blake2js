@@ -1,10 +1,11 @@
 {
 	"targets": [
 		{
-			"target_name": "hook",
+			"target_name": "addon",
 			"sources": [
-				"src/bindings.cc",
-				"src/class/blake2b.cc",
+				"src/addon.cc",
+				"src/module/blake2b.cc",
+				"src/utils.cc",
 
 				"lib/BLAKE2/sse/blake2b.c",
 				"lib/BLAKE2/sse/blake2bp.c",
