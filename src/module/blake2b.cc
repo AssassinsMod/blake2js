@@ -84,7 +84,7 @@ void Blake2b::New(const FunctionCallbackInfo<Value>& args) {
 		std::cout << "Blake2b constructor invoked as method with " << args.Length() << " arguments!" << std::endl;
 		#endif
 
-		Blake2b::NewInstance(args); //FIXME not sure if this works correctly
+//		Blake2b::NewInstance(args); //FIXME not sure if this works correctly
 	}
 }
 

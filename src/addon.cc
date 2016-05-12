@@ -42,7 +42,7 @@ void CreateHash(const FunctionCallbackInfo<Value>& args) {
 	#endif
 
 	if (algorithm == "blake2b") {
-		Blake2b::NewInstance(args); //FIXME Generates error while passing arguments
+		Blake2b::NewInstance(args); //FIXME Generates error on call
 		//TODO support for blake2bp, blake2s and blake2sp
 	} else {
 		isolate->ThrowException(Exception::ReferenceError(
