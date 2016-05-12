@@ -15,3 +15,6 @@ indent_size = 2
 
 [*.html]
 tab_width = 4
+
+[*.{cc,hh}]
+tab_width = 2
