@@ -1,0 +1,9 @@
+PID 30022 received SIGSEGV for address: 0x30
+/home/assassinsmod/git/node-blake2/node_modules/segfault-handler/build/Release/segfault-handler.node(+0x1a1b)[0x7fd5e81bfa1b]
+/usr/lib/libpthread.so.0(+0x10ef0)[0x7fd5eddb9ef0]
+/home/assassinsmod/git/node-blake2/build/Release/addon.node(blake2b_init_param+0x0)[0x7fd5e3dfaaf0]
+/home/assassinsmod/git/node-blake2/build/Release/addon.node(blake2b_init+0x39)[0x7fd5e3dfabf9]
+/home/assassinsmod/git/node-blake2/build/Release/addon.node(_ZN7Blake2b3NewERKN2v820FunctionCallbackInfoINS0_5ValueEEE+0x17e)[0x7fd5e3df7fee]
+node(_ZN2v88internal25FunctionCallbackArguments4CallEPFvRKNS_20FunctionCallbackInfoINS_5ValueEEEE+0xf6)[0x6c15e6]
+node[0x7060c5]
+[0x15eba60961b]
