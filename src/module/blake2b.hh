@@ -1,44 +1,57 @@
 #ifndef BLAKE2B_H
 #define BLAKE2B_H
 
+#include <cstdio>
+#include <string>
 #include <node.h>
 #include <node_buffer.h>
 #include <node_object_wrap.h>
-
-#include "lib/BLAKE2/sse/blake2.h"
-
-using namespace v8;
+#include "../../lib/BLAKE2/sse/blake2.h"
 
 class Blake2b : public node::ObjectWrap {
 	public:
-		/*! Initialize the class.
-		 * Performs a serie of operations needed for the class to be
-		 * usable. Only needs to be called once on module load.
-		 * @param exports   Module api.
+		/*! Initialize class.
+		 * Performs preliminary operations to make the class wrappable
+		 * by the v8 engine.
+		 * @param isolate  Isolate.
 		 */
-		static void Init(Local<Object> exports);
+		static void Init(v8::Isolate* isolate);
 
-		/*! Wrappable constructor.
-		 * This is the constructor that is called from javascript
-		 * @param args   function call parameters.
-		 */
-		static void New(const FunctionCallbackInfo<Value>& args);
 
-		/*! Object factory.
-		 * This is used to create new instances of the class.
-		 * @param args   function call parameters.
+		/*! Create a new instance of the class.
+		 *
+		 * @param info  Call info.
 		 */
-		static void NewInstance(const FunctionCallbackInfo<Value>& args);
+		static void NewInstance(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 	private:
+		// Class constructor/destructor.
 		explicit Blake2b();
 		~Blake2b();
 
-		static Persistent<Function> constructor; /*!< V8 constructor template. */
-		static void Update(const FunctionCallbackInfo<Value>& args);
-		static void Digest(const FunctionCallbackInfo<Value>& args);
+		void init(int length, std::string key);
 
-		blake2b_state state; /*!< Blake2b internal state. */
+		uint8_t outlen; /*!< Output hash length. */
+		blake2b_state* state; /*!< Blake2b internal state. */
+		static v8::Persistent<v8::Function> constructor; /*!< V8 constructor template. */
+
+		/*! Wrappable constructor.
+		 * This is the method called when the constructor is invoked in javascript.
+		 * @param info  Call info.
+		 */
+		static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+		/*! Update the current hash with given data.
+		 *
+		 * @param args  Data to update the hash with.
+		 */
+		static void Update(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+		/*! Finalize the current hash and return the result.
+		 *
+		 * @param args  Ignored.
+		 */
+		static void Digest(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 #endif
