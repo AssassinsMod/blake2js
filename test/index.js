@@ -2,25 +2,19 @@
 
 'use strict';
 
+const addon = require('bindings')('addon');
+
+//*
 const EH = require('segfault-handler');
 EH.registerHandler('crash.log');
+//*/
 
-try {
-	const blake2 = require('bindings')('addon');
+const blake2s = addon.createHash('blake2s');
+blake2s.update(new Buffer('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'));
+console.log('0x' + blake2s.digest().toString('hex'));
 
-	// Blake2b
-	const blake2b = blake2.createHash('blake2b');
-	return;
-	/*
-		const blake2b_key = blake2.createHash('blake2b', {
-			key: 'key',
-			length: 64
-		});
-	//*/
 
-	blake2b.update(new Buffer('00FF', 'hex'))
 
-	console.log(blake2b.digest().toString('hex'));
-} catch (err) {
-	console.log("ERROR:", err);
-}
+const blake2b = addon.createHash('blake2b');
+blake2b.update(new Buffer('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'))
+console.log('0x' + blake2b.digest().toString('hex'));

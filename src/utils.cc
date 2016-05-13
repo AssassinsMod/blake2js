@@ -1,17 +1,29 @@
 #include "utils.hh"
 
-using std::string;
-using v8::Exception;
+namespace B2JS {
+
 using v8::Isolate;
 using v8::Local;
-using v8::Object;
-using v8::String;
 using v8::Value;
+using v8::String;
+using std::string;
+using v8::Object;
 
-void B2JS::Utils::ParseOptions(Isolate* isolate, Local<Value> arg, blake2b_constant max_keylen, string& key, uint8_t& outlen) {
+void Utils::PrintHex(const uint8_t* data, size_t length) {
+	printf("| ================== DATA =================== |\n");
+
+	for (size_t i = 0; i < length; i++) {
+		printf("%02x ", data[i]);
+
+		if ((i + 1) % 16 == 0) {
+			printf("\n");
+		}
+	}
+}
+
+void Utils::ParseOptions(Isolate* isolate, Local<Value> arg, uint8_t max_keylen, string& key, uint8_t& outlen) {
 	if (!arg->IsObject()) {
-		isolate->ThrowException(Exception::SyntaxError(
-			String::NewFromUtf8(isolate, "Options must be passed as an object!")));
+		isolate->ThrowException(String::NewFromUtf8(isolate, "Invalid options format!"));
 		return;
 	}
 
@@ -20,7 +32,7 @@ void B2JS::Utils::ParseOptions(Isolate* isolate, Local<Value> arg, blake2b_const
 	Local<String> _key = String::NewFromUtf8(isolate, "key"),
 	           _length = String::NewFromUtf8(isolate, "length");
 
-	// options.key
+	// key
 	if (options->Has(_key)) {
 		Local<Value> _key_val = options->Get(_key);
 
@@ -33,23 +45,20 @@ void B2JS::Utils::ParseOptions(Isolate* isolate, Local<Value> arg, blake2b_const
 			if (key_length <= max_keylen) {
 				key = string(key_data, key_length);
 			} else {
-				isolate->ThrowException(Exception::SyntaxError(
-					String::NewFromUtf8(isolate, "Exceeded max key length!")));
+				isolate->ThrowException(String::NewFromUtf8(isolate, "Exceeded max key length!"));
 				return;
 			}
 		} else if (_key_val->IsString()) {
 			//TODO Add stringed keys support
-			isolate->ThrowException(Exception::ReferenceError(
-				String::NewFromUtf8(isolate, "String key not supported yet!")));
+			isolate->ThrowException(String::NewFromUtf8(isolate, "String key not supported yet!"));
 			return;
 		} else {
-			isolate->ThrowException(Exception::SyntaxError(
-				String::NewFromUtf8(isolate, "Unsupported key format!")));
+			isolate->ThrowException(String::NewFromUtf8(isolate, "Unsupported key format!"));
 			return;
 		}
 	}
 
-	// options.length
+	// length
 	if (options->Has(_length)) {
 		Local<Value> _length_val = options->Get(_length);
 
@@ -59,14 +68,14 @@ void B2JS::Utils::ParseOptions(Isolate* isolate, Local<Value> arg, blake2b_const
 			if (value < outlen) {
 				outlen = value;
 			} else {
-				isolate->ThrowException(Exception::RangeError(
-					String::NewFromUtf8(isolate, "Exceeded maximum outlen")));
+				isolate->ThrowException(String::NewFromUtf8(isolate, "Exceeded maximum outlen"));
 				return;
 			}
 		} else {
-			isolate->ThrowException(Exception::SyntaxError(
-				String::NewFromUtf8(isolate, "Length must be an integer")));
+			isolate->ThrowException(String::NewFromUtf8(isolate, "Length must be an integer"));
 			return;
 		}
 	}
+}
+
 }

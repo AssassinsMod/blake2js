@@ -4,7 +4,7 @@
 			"target_name": "addon",
 			"sources": [
 				"src/addon.cc",
-				"src/module/blake2b.cc",
+				"src/modules/blake2s.cc",
 				"src/utils.cc",
 
 				"lib/BLAKE2/sse/blake2b.c",

@@ -1,11 +1,12 @@
 #define DEBUG
 
-#include <cstdint>
-#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <node.h>
-#include "module/blake2b.hh"
+#include "modules/blake2s.hh"
+#include "modules/blake2b.hh"
+
+namespace B2JS {
 
 using std::string;
 using v8::Exception;
@@ -16,22 +17,37 @@ using v8::Object;
 using v8::String;
 using v8::Value;
 
+void Init(Local<Object> exports);
+void CreateHash(const FunctionCallbackInfo<Value>& args);
+
+NODE_MODULE(addon, Init)
+
+
+// ================ ]  DEFINITIONS  [ ================ //
+void Init(Local<Object> exports) {
+	// Initialize modules
+	Blake2s::Init(exports->GetIsolate());
+	//TODO Blake2sp::Init(exports->GetIsolate());
+	//TODO Blake2b::Init(exports->GetIsolate());
+	//TODO Blake2bp::Init(exports->GetIsolate());
+
+	// Register Methods
+	NODE_SET_METHOD(exports, "createHash", CreateHash);
+
+	#ifdef DEBUG
+	std::cout << "Components succesfully initialized!" << std::endl;
+	#endif
+}
+
 void CreateHash(const FunctionCallbackInfo<Value>& args) {
 	Isolate* isolate = args.GetIsolate();
 
 	#ifdef DEBUG
-	std::cout << "Called 'CreateHash' with " << args.Length() << " arguments!" << std::endl;
+	std::cout << "Called 'CreateHash' with " << args.Length() << " arguments!" << std::endl << "?1 = " << (args[1]->IsUndefined() ? "y" : "n") << std::endl;
 	#endif
 
-	if (args.Length() < 1) { // if no algorithm passed
-		isolate->ThrowException(Exception::SyntaxError(
-			String::NewFromUtf8(isolate, "Algorithm not specified!")));
-		return;
-	}
-
-	if (!args[0]->IsString()) {
-		isolate->ThrowException(Exception::SyntaxError(
-			String::NewFromUtf8(isolate, "Algorithm must be a string!")));
+	if (args[0]->IsUndefined() || !args[0]->IsString()) {
+		isolate->ThrowException(String::NewFromUtf8(isolate, "Invalid algorithm"));
 		return;
 	}
 
@@ -41,27 +57,14 @@ void CreateHash(const FunctionCallbackInfo<Value>& args) {
 	std::cout << "  arg0 = " << algorithm << std::endl;
 	#endif
 
-	if (algorithm == "blake2b") {
-		Blake2b::NewInstance(args); //FIXME Generates error on call
-		//TODO support for blake2bp, blake2s and blake2sp
-	} else {
-		isolate->ThrowException(Exception::ReferenceError(
-			String::NewFromUtf8(isolate, "Algorithm not supported yet!")));
+	if (algorithm == "blake2s") {
+		Blake2s::NewInstance(args);
+	} else if (algorithm == "blake2b") {
+		Blake2b::NewInstance(args);
+	} else { //TODO support other algorithms
+		isolate->ThrowException(String::NewFromUtf8(isolate, "Algorithm not supported yet!"));
 		return;
 	}
 }
 
-void Init(Local<Object> exports, Local<Object> module) {
-	// Init modules
-	Blake2b::Init(exports->GetIsolate());
-	//TODO init blake2bp, blake2s and blake2sp
-
-	// Static `createHash` function
-	NODE_SET_METHOD(exports, "createHash", CreateHash);
-
-	#ifdef DEBUG
-	std::cout << "Components succesfully initialized!" << std::endl;
-	#endif
-}
-
-NODE_MODULE(addon, Init)
+} // B2JS
