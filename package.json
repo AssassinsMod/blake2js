@@ -1,7 +1,7 @@
 {
-  "name": "node-blake2",
+  "name": "blake2js",
   "version": "0.1.0",
-  "description": "nodejs hook for blake2",
+  "description": "Blake2 port for Node.js",
   "main": "index.js",
   "scripts": {
     "test": "node test/index.js"
@@ -19,7 +19,5 @@
   "dependencies": {
     "bindings": "^1.2.1"
   },
-  "devDependencies": {
-    "segfault-handler": "^1.0.0"
-  }
+  "devDependencies": {}
 }
