@@ -4,7 +4,6 @@
 #include <string>
 #include <node.h>
 #include "modules/blake2s.hh"
-#include "modules/blake2b.hh"
 
 namespace B2JS {
 
@@ -59,8 +58,6 @@ void CreateHash(const FunctionCallbackInfo<Value>& args) {
 
 	if (algorithm == "blake2s") {
 		Blake2s::NewInstance(args);
-	} else if (algorithm == "blake2b") {
-		Blake2b::NewInstance(args);
 	} else { //TODO support other algorithms
 		isolate->ThrowException(String::NewFromUtf8(isolate, "Algorithm not supported yet!"));
 		return;
