@@ -1,6 +1,9 @@
 #include <string>
 #include <node.h>
 #include "modules/blake2s.hh"
+#include "modules/blake2sp.hh"
+#include "modules/blake2b.hh"
+#include "modules/blake2bp.hh"
 
 namespace B2JS {
 
@@ -23,9 +26,9 @@ NODE_MODULE(addon, Init)
 void Init(Local<Object> exports) {
 	// Initialize modules
 	Blake2s::Init(exports->GetIsolate());
-	//TODO Blake2sp::Init(exports->GetIsolate());
-	//TODO Blake2b::Init(exports->GetIsolate());
-	//TODO Blake2bp::Init(exports->GetIsolate());
+	Blake2sp::Init(exports->GetIsolate());
+	Blake2b::Init(exports->GetIsolate());
+	Blake2bp::Init(exports->GetIsolate());
 
 	// Register Methods
 	NODE_SET_METHOD(exports, "createHash", CreateHash);
@@ -43,6 +46,12 @@ void CreateHash(const FunctionCallbackInfo<Value>& args) {
 
 	if (algorithm == "blake2s") {
 		Blake2s::NewInstance(args);
+	} else if (algorithm == "blake2sp") {
+		Blake2sp::NewInstance(args);
+	} else if (algorithm == "blake2b") {
+		Blake2b::NewInstance(args);
+	} else if (algorithm == "blake2bp") {
+		Blake2bp::NewInstance(args);
 	} else { //TODO support other algorithms
 		isolate->ThrowException(String::NewFromUtf8(isolate, "Algorithm not supported yet!"));
 		return;

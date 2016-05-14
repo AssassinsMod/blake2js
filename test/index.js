@@ -4,11 +4,23 @@
 
 const addon = require('bindings')('addon');
 
-//*
+/*
 const EH = require('segfault-handler');
 EH.registerHandler('crash.log');
 //*/
 
 const blake2s = addon.createHash('blake2s');
-blake2s.update(new Buffer('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'));
+blake2s.update(new Buffer('blake2s', 'utf-8'));
 console.log('0x' + blake2s.digest().toString('hex'));
+
+const blake2sp = addon.createHash('blake2sp');
+blake2sp.update(new Buffer('blake2sp', 'utf-8'));
+console.log('0x' + blake2sp.digest().toString('hex'));
+
+const blake2b = addon.createHash('blake2b');
+blake2b.update(new Buffer('blake2b', 'utf-8'));
+console.log('0x' + blake2b.digest().toString('hex'));
+
+const blake2bp = addon.createHash('blake2bp');
+blake2bp.update(new Buffer('blake2bp', 'utf-8'));
+console.log('0x' + blake2bp.digest().toString('hex'));
