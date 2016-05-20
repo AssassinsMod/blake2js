@@ -1,27 +1,42 @@
-#ifndef B2JS_BLAKE2BP_H
-#define B2JS_BLAKE2BP_H
+#ifndef B2JS_BLAKE2_H
+#define B2JS_BLAKE2_H
 
 #include <cstring> // memcpy
 #include <string>
 #include <node.h>
 #include <node_buffer.h>
 #include <node_object_wrap.h>
-#include "../../lib/BLAKE2/sse/blake2.h"
-#include "../utils.hh"
+#include "../lib/BLAKE2/sse/blake2.h"
 
 namespace B2JS {
 
-class Blake2bp : public node::ObjectWrap {
+enum algorithm {
+	BLAKE2S,
+	BLAKE2SP,
+	BLAKE2B,
+	BLAKE2BP
+};
+
+union blake2_state {
+	blake2s_state  s;
+	blake2sp_state sp;
+	blake2b_state  b;
+	blake2bp_state bp;
+};
+
+class Blake2 : public node::ObjectWrap {
 public:
 	static void Init(v8::Isolate* isolate);
 	static void NewInstance(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 	uint8_t outlen;
-	blake2bp_state state;
+	blake2_state state;
 
-	explicit Blake2bp(uint8_t length = BLAKE2B_OUTBYTES, std::string key = "");
-	 ~Blake2bp();
+	int (*update)(void*, const uint8_t*, uint64_t);
+	int (*digest)(void*, uint8_t*, uint8_t);
+
+	explicit Blake2(); ~Blake2();
 	static v8::Persistent<v8::Function> constructor;
 	static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 

@@ -1,9 +1,6 @@
 #include <string>
 #include <node.h>
-#include "modules/blake2s.hh"
-#include "modules/blake2sp.hh"
-#include "modules/blake2b.hh"
-#include "modules/blake2bp.hh"
+#include "blake2.hh"
 
 namespace B2JS {
 
@@ -14,48 +11,57 @@ using v8::Isolate;
 using v8::Local;
 using v8::Object;
 using v8::String;
+using v8::Undefined;
 using v8::Value;
 
 void Init(Local<Object> exports);
 void CreateHash(const FunctionCallbackInfo<Value>& args);
+void CreateHmac(const FunctionCallbackInfo<Value>& args);
 
 NODE_MODULE(addon, Init)
 
 
 // ================ ]  DEFINITIONS  [ ================ //
 void Init(Local<Object> exports) {
-	// Initialize modules
-	Blake2s::Init(exports->GetIsolate());
-	Blake2sp::Init(exports->GetIsolate());
-	Blake2b::Init(exports->GetIsolate());
-	Blake2bp::Init(exports->GetIsolate());
+	Blake2::Init(exports->GetIsolate());
 
 	// Register Methods
 	NODE_SET_METHOD(exports, "createHash", CreateHash);
+	NODE_SET_METHOD(exports, "createHmac", CreateHmac);
 }
 
+// (CreateHash|CreateHmac): (algorithm, key, length)
 void CreateHash(const FunctionCallbackInfo<Value>& args) {
 	Isolate* isolate = args.GetIsolate();
 
 	if (args[0]->IsUndefined() || !args[0]->IsString()) {
-		isolate->ThrowException(String::NewFromUtf8(isolate, "Invalid algorithm"));
+		isolate->ThrowException(String::NewFromUtf8(isolate, "Invalid or unspecified algorithm!"));
 		return;
 	}
 
-	string algorithm = string(*String::Utf8Value(args[0]->ToString()));
+	// If length is specified move it in position 2
+	if (!args[1]->IsUndefined()) {
+		args[2] = args[1];
+		args[1] = Undefined(isolate);
+	}
 
-	if (algorithm == "blake2s") {
-		Blake2s::NewInstance(args);
-	} else if (algorithm == "blake2sp") {
-		Blake2sp::NewInstance(args);
-	} else if (algorithm == "blake2b") {
-		Blake2b::NewInstance(args);
-	} else if (algorithm == "blake2bp") {
-		Blake2bp::NewInstance(args);
-	} else { //TODO support other algorithms
-		isolate->ThrowException(String::NewFromUtf8(isolate, "Algorithm not supported yet!"));
+	Blake2::NewInstance(args);
+}
+
+void CreateHmac(const FunctionCallbackInfo<Value>& args) {
+	Isolate* isolate = args.GetIsolate();
+
+	if (args[0]->IsUndefined() || !args[0]->IsString()) {
+		isolate->ThrowException(String::NewFromUtf8(isolate, "Invalid or unspecified algorithm!"));
 		return;
 	}
+
+	if (args[1]->IsUndefined() || (!node::Buffer::HasInstance(args[1]) && !args[1]->IsString())) {
+		isolate->ThrowException(String::NewFromUtf8(isolate, "Invalid or unspecified key!"));
+		return;
+	}
+
+	Blake2::NewInstance(args);
 }
 
 } // B2JS
