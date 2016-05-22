@@ -4,27 +4,38 @@
 
 const addon = require('bindings')('addon');
 
-/*
-const EH = require('segfault-handler');
-EH.registerHandler('crash.log');
+//*
+
+// Blake2s
+console.log('Blake2s  ', addon
+	.createHash('blake2s')
+	.update(new Buffer('blake2s'))
+	.digest()
+	.toString('hex')
+);
+
+// Blake2sp
+console.log('Blake2sp ', addon
+	.createHash('blake2sp')
+	.update(new Buffer('blake2sp'))
+	.digest()
+	.toString('hex')
+);
+
+// Blake2b
+console.log('Blake2b  ', addon
+	.createHash('blake2b')
+	.update(new Buffer('blake2b'))
+	.digest()
+	.toString('hex')
+);
+
+// Blake2bp
+console.log('Blake2bp ', addon
+	.createHash('blake2bp')
+	.update(new Buffer('blake2bp'))
+	.digest()
+	.toString('hex')
+);
+
 //*/
-
-/*
-const blake2s = addon.createHash('blake2s');
-blake2s.update(new Buffer('blake2s', 'utf-8'));
-console.log('0x' + blake2s.digest().toString('hex'));
-
-const blake2sp = addon.createHash('blake2sp');
-blake2sp.update(new Buffer('blake2sp', 'utf-8'));
-console.log('0x' + blake2sp.digest().toString('hex'));
-
-const blake2b = addon.createHash('blake2b');
-blake2b.update(new Buffer('blake2b', 'utf-8'));
-console.log('0x' + blake2b.digest().toString('hex'));
-//*/
-
-const blake2bp = addon.createHash('blake2bp');
-blake2bp.update(new Buffer('blake2bp', 'utf-8'));
-console.log('0x' + blake2bp.digest().toString('hex'));
-
-console.log('0x' + addon.createHash('blake2bp').update(new Buffer('blake2bp', 'utf-8')).digest().toString('hex'));
