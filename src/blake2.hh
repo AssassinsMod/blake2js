@@ -10,13 +10,6 @@
 
 namespace B2JS {
 
-enum algorithm {
-	BLAKE2S,
-	BLAKE2SP,
-	BLAKE2B,
-	BLAKE2BP
-};
-
 union blake2_state {
 	blake2s_state  s;
 	blake2sp_state sp;

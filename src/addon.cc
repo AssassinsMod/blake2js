@@ -56,7 +56,7 @@ void CreateHmac(const FunctionCallbackInfo<Value>& args) {
 		return;
 	}
 
-	if (args[1]->IsUndefined() || (!node::Buffer::HasInstance(args[1]) && !args[1]->IsString())) {
+	if (args[1]->IsUndefined() || !args[1]->IsString()) {
 		isolate->ThrowException(String::NewFromUtf8(isolate, "Invalid or unspecified key!"));
 		return;
 	}
